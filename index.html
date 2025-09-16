@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      background-color: #f0f0f0;
+    }
+
+    .login-box {
+      width: 320px;
+      margin: auto;
+      padding: 30px;
+     
+    }
+
+    .login-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="submit"] {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #f6f6f6;
+      background-color: #f6f6f6;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 
+      inset 4px 4px 5px rgba(85, 85, 85, 0.3),   /* ظل من أسفل اليمين */
+      inset -4px -4px 5px #ffffffe9;  
+    }
+
+    input[type="submit"] {
+      transition: 0.5s;
+      background-color: #f0f0f0;
+      color: inherit;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 
+       4px 4px 5px rgba(85, 85, 85, 0.3),   /* ظل من أسفل اليمين */
+       -4px -4px 5px #ffffffe9;  
+    
+    }
+
+    input[type="submit"]:hover {
+      
+      background-image:linear-gradient(#01b7d7,#0099b4) ;
+      color: beige;
+
+    }
+
+    input:focus,
+    input:focus-visible,
+    input:active 
+    {
+      
+      outline: none !important;
+      border: none !important;
+
+    }
+
+
+    label{
+      text-align: start;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <form>
+      <label>Email</label>
+      <input type="email"  required>
+      <label>Password</label>
+      <input type="password"  required>
+      <input type="submit" value="Login">
+    </form>
+  </div>
+</body>
+</html>
