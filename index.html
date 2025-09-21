@@ -11,11 +11,21 @@
       background-color: #f0f0f0;
     }
 
+    .video-container {
+      margin-bottom: 30px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
     .login-box {
       width: 320px;
       margin: auto;
       padding: 30px;
-     
     }
 
     .login-title {
@@ -40,8 +50,8 @@
       border-radius: 12px;
       text-align: left;
       box-shadow: 
-      inset 4px 4px 5px rgba(85, 85, 85, 0.3),   /* ظل من أسفل اليمين */
-      inset -4px -4px 5px #ffffffe9;  
+      inset 4px 4px 5px rgba(85, 85, 85, 0.3),
+      inset -4px -4px 5px #ffffffe9;
     }
 
     input[type="submit"] {
@@ -51,43 +61,47 @@
       cursor: pointer;
       text-align: center;
       box-shadow: 
-       4px 4px 5px rgba(85, 85, 85, 0.3),   /* ظل من أسفل اليمين */
-       -4px -4px 5px #ffffffe9;  
-    
+       4px 4px 5px rgba(85, 85, 85, 0.3),
+       -4px -4px 5px #ffffffe9;
     }
 
     input[type="submit"]:hover {
-      
-      background-image:linear-gradient(#01b7d7,#0099b4) ;
+      background-image: linear-gradient(#01b7d7, #0099b4);
       color: beige;
-
     }
 
     input:focus,
     input:focus-visible,
-    input:active 
-    {
-      
+    input:active {
       outline: none !important;
       border: none !important;
-
     }
 
-
-    label{
+    label {
       text-align: start;
     }
   </style>
 </head>
 <body>
+
+  <div class="video-container">
+    <video autoplay loop muted>
+      <source src="your-video.mp4" type="video/mp4">
+      متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+  </div>
+
   <div class="login-box">
     <form>
       <label>Email</label>
-      <input type="email"  required>
+      <input type="email" required>
       <label>Password</label>
-      <input type="password"  required>
+      <input type="password" required>
       <input type="submit" value="Login">
     </form>
   </div>
+
 </body>
 </html>
+
+
