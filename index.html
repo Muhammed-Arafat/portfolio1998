@@ -1,108 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      background-color: #f0f0f0;
-    }
-
-    .video-container {
-      margin-bottom: 30px;
-    }
-
-    video {
-      width: 80%;
-      max-width: 600px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .login-box {
-      width: 320px;
-      margin: auto;
-      padding: 30px;
-    }
-
-    .login-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="submit"] {
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #f6f6f6;
-      background-color: #f6f6f6;
-      border-radius: 12px;
-      text-align: left;
-      box-shadow: 
-      inset 4px 4px 5px rgba(85, 85, 85, 0.3),
-      inset -4px -4px 5px #ffffffe9;
-    }
-
-    input[type="submit"] {
-      transition: 0.5s;
-      background-color: #f0f0f0;
-      color: inherit;
-      cursor: pointer;
-      text-align: center;
-      box-shadow: 
-       4px 4px 5px rgba(85, 85, 85, 0.3),
-       -4px -4px 5px #ffffffe9;
-    }
-
-    input[type="submit"]:hover {
-      background-image: linear-gradient(#01b7d7, #0099b4);
-      color: beige;
-    }
-
-    input:focus,
-    input:focus-visible,
-    input:active {
-      outline: none !important;
-      border: none !important;
-    }
-
-    label {
-      text-align: start;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login (JS-built)</title>
 </head>
 <body>
+  <script>
+    // ---------- إعدادات قابلة للتعديل ----------
+    const VIDEO_SOURCES = [
+      { src: 'https://cdn.example.com/video.webm', type: 'video/webm' },
+      { src: 'https://cdn.example.com/video.mp4', type: 'video/mp4' }
+    ];
+    const POSTER = 'https://cdn.example.com/thumb.jpg'; // صورة ثابتة سريعة للعرض
+    const CDN_HOST = 'https://cdn.example.com'; // استخدم CDN أو أصل سريع إن وُجد
+    // -----------------------------------------
 
-  <div class="video-container">
-    <video autoplay loop muted playsinline>
-      <source src="your-video.mp4" type="video/mp4">
-      متصفحك لا يدعم تشغيل الفيديو.
-    </video>
-  </div>
+    // إضافة روابط preconnect و dns-prefetch لخفض زمن DNS/TCP
+    const addPreconnect = (url) => {
+      try {
+        const u = new URL(url);
+        const host = u.origin;
+        const rels = ['preconnect','dns-prefetch'];
+        rels.forEach(r => {
+          const l = document.createElement('link');
+          l.rel = r;
+          l.href = host;
+          l.crossOrigin = '';
+          document.head.appendChild(l);
+        });
+      } catch(e){}
+    };
+    addPreconnect(CDN_HOST);
 
-  <div class="login-box">
-    <form>
-      <label>Email</label>
-      <input type="email" required>
-      <label>Password</label>
-      <input type="password" required>
-      <input type="submit" value="Login">
-    </form>
-  </div>
+    // أنشئ أنماط CSS عبر JS
+    const css = `
+      :root{--bg:#f0f0f0;--card:#fff;--accent1:#01b7d7;--accent2:#0099b4}
+      html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);direction:rtl}
+      .wrap{display:flex;flex-direction:column;align-items:center;padding:40px 16px;gap:24px}
+      .video-container{width:100%;display:flex;justify-content:center}
+      video{width:80%;max-width:600px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.18);background:#000}
+      .login-box{width:320px;padding:28px;border-radius:12px;background:var(--card);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+      form{display:flex;flex-direction:column;gap:12px}
+      label{text-align:start}
+      input[type=email],input[type=password],input[type=submit]{padding:12px;font-size:15px;border-radius:12px;border:1px solid #eee;background:#fafafa}
+      input[type=submit]{cursor:pointer;box-shadow:4px 4px 5px rgba(85,85,85,.18)}
+      @media (max-width:420px){video{width:100%} .login-box{width:100%}}
+    `;
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
 
+    // بناء DOM
+    const wrap = document.createElement('div');
+    wrap.className = 'wrap';
+
+    // video container
+    const vcont = document.createElement('div');
+    vcont.className = 'video-container';
+    const video = document.createElement('video');
+
+    // تحسّن التجربة: لا نحمّل الفيديو كاملًا حتى يقارب ظهوره
+    video.setAttribute('preload', 'metadata');
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('loop', '');
+    video.controls = true;
+    video.poster = POSTER;
+    // لا نضيف المصادر الآن — سنضيفها عند ظهور العنصر في الشاشة (lazy load)
+    vcont.appendChild(video);
+    wrap.appendChild(vcont);
+
+    // form container
+    const box = document.createElement('div');
+    box.className = 'login-box';
+    const form = document.createElement('form');
+
+    const lblEmail = document.createElement('label'); lblEmail.textContent = 'Email';
+    const inEmail = document.createElement('input'); inEmail.type = 'email'; inEmail.required = true;
+
+    const lblPass = document.createElement('label'); lblPass.textContent = 'Password';
+    const inPass = document.createElement('input'); inPass.type = 'password'; inPass.required = true;
+
+    const submit = document.createElement('input'); submit.type = 'submit'; submit.value = 'Login';
+
+    form.appendChild(lblEmail);
+    form.appendChild(inEmail);
+    form.appendChild(lblPass);
+    form.appendChild(inPass);
+    form.appendChild(submit);
+    box.appendChild(form);
+    wrap.appendChild(box);
+
+    document.body.appendChild(wrap);
+
+    // ---------- تحسينات الأداء والسلوك ----------
+    // 1) Lazy load المصادر عندما يدخل الفيديو مجال العرض
+    const addSourcesToVideo = () => {
+      // منع الإضافة المزدوجة
+      if (video.dataset.sourcesAdded) return;
+      VIDEO_SOURCES.forEach(s => {
+        const srcEl = document.createElement('source');
+        srcEl.src = s.src;
+        srcEl.type = s.type;
+        video.appendChild(srcEl);
+      });
+      video.dataset.sourcesAdded = '1';
+      // حاول بدء التشغيل بعد إضافة المصادر
+      video.load();
+      // تحاول التشغيل الصامت إن سمح المتصفح
+      video.play().catch(()=>{});
+    };
+
+    // 2) Intersection Observer لتحميل الفيديو عند اقترابه من العرض
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            addSourcesToVideo();
+            obs.unobserve(e.target);
+          }
+        });
+      }, { root: null, rootMargin: '200px', threshold: 0.01 });
+      io.observe(video);
+    } else {
+      // fallback: أضف المصادر حالاً
+      addSourcesToVideo();
+    }
+
+    // 3) تحسين بدء التشغيل الأولي: عرض صورة poster بسرعة، ومحاولة تحميل metadata فقط
+    // (تم ضبط preload="metadata" أعلاه)
+
+    // 4) استجابة عند مشاكل التخزين المؤقت: إذا حدث buffering، خفّض الجودة إن كنت تستخدم adaptive logic
+    // ملاحظة: هنا فقط لالتقاط الأحداث وعرض تحذير؛ التنفيذ الفعلي لتغيير الجودة يحتاج HLS/DASH أو مصادر متعددة مدارة يدوياً
+    video.addEventListener('waiting', () => {
+      console.warn('video waiting (buffering)'); // يمكن إظهار رسالة للمستخدم أو تبديل إلى مصدر بدقة أقل
+    });
+
+    // 5) تحسين تجربة الشبكات البطيئة (اقتراح بسيط): لو لم يبدأ الفيديو خلال X ثانية، استبدل المصدر بأخرى أصغر إن وُجدت
+    const SMALL_SRC = 'your-video.mp4'; // ضع مسار نسخة أصغر إن وُجدت
+    const START_TIMEOUT_MS = 7000;
+    let startTimer = setTimeout(() => {
+      if (video.readyState < 3) { // HAVE_FUTURE_DATA < 3
+        // إن وجدت نسخة صغيرة، استبدل المصدر
+        // إضافة حماية من التكرار
+        if (!video.dataset.fallbackApplied && SMALL_SRC) {
+          // إزالة المصادر الحالية
+          while (video.firstChild) video.removeChild(video.firstChild);
+          const s = document.createElement('source');
+          s.src = SMALL_SRC;
+          s.type = 'video/mp4';
+          video.appendChild(s);
+          video.dataset.fallbackApplied = '1';
+          video.load();
+          video.play().catch(()=>{});
+        }
+      }
+    }, START_TIMEOUT_MS);
+
+    video.addEventListener('playing', () => {
+      clearTimeout(startTimer);
+    });
+
+    // 6) تحسينات CORS و cache headers تكون على مستوى الخادم (تذكر تفعيلها)
+    // 7) من الأفضل أن تقدم ملفاتك عبر CDN مع دعم Range requests و HTTP/2 أو HTTP/3
+
+    // ---------- اختصارات لتجربة المطور ----------
+    // تمكين تشغيل الفيديو التجريبي في حال أردت إضافة مصدر محلي سريع أثناء التطوير:
+    window.__devAddLocalSource = function(url,type='video/mp4') {
+      const s = document.createElement('source');
+      s.src = url; s.type = type;
+      video.appendChild(s);
+      video.load();
+    };
+  </script>
 </body>
 </html>
-
-
-
